@@ -7,7 +7,7 @@ PEAR_CONFIG_DIR=$(shell pwd)/debian/tmp
 PEAR ?= /usr/bin/pear
 PEAR += -D php_dir=$(PEAR_CONFIG_DIR)
 
-pear_pkg = $(shell LANG=C pear  -v -v -v info package.xml | grep '^Name' | sed 's/Name *//')-$(DEB_UPSTREAM_VERSION)
+pear_pkg = $(shell LANG=C $(PEAR)  -v -v -v info package.xml | grep '^Name' | sed 's/Name *//')-$(DEB_UPSTREAM_VERSION)
 
 update-config::
 	mkdir -p $(PEAR_CONFIG_DIR)
@@ -17,6 +17,7 @@ update-config::
 	tar xvf $(pear_pkg).tgz
 
 reverse-config::
+	rm -rf $(PEAR_CONFIG_DIR)
 	if [ -f $(pear_pkg).tgz ]; then \
 	        rm $(pear_pkg).tgz; \
 	fi
