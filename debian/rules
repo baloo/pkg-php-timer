@@ -2,6 +2,22 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 
+PEAR ?= /usr/bin/pear
+pear_pkg = $(shell LANG=C pear  -v -v -v info package.xml | grep '^Name' | sed 's/Name *//')-$(DEB_UPSTREAM_VERSION)
+
+update-config::
+	$(PEAR) -v -v -v \
+	        package package.xml
+	tar xvf $(pear_pkg).tgz
+
+reverse-config::
+	if [ -f $(pear_pkg).tgz ]; then \
+	        rm $(pear_pkg).tgz; \
+	fi
+	if [ -d $(pear_pkg) ]; then \
+	        rm -fr $(pear_pkg); \
+	fi
+
 common-binary-predeb-arch::
 	find ./ | xargs touch $1
 
