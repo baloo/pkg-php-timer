@@ -11,7 +11,7 @@ pear_pkg = $(shell LANG=C pear  -v -v -v info package.xml | grep '^Name' | sed '
 
 update-config::
 	mkdir -p $(PEAR_CONFIG_DIR)
-	$(PEAR) discover-channel pear.phpunit.de
+	$(PEAR) channel-discover pear.phpunit.de
 	$(PEAR) -v -v -v \
 	        package package.xml
 	tar xvf $(pear_pkg).tgz
