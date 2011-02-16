@@ -2,10 +2,16 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 
+PEAR_CONFIG_DIR=$(shell pwd)/debian/tmp
+
 PEAR ?= /usr/bin/pear
+PEAR += -D php_dir=$(PEAR_CONFIG_DIR)
+
 pear_pkg = $(shell LANG=C pear  -v -v -v info package.xml | grep '^Name' | sed 's/Name *//')-$(DEB_UPSTREAM_VERSION)
 
 update-config::
+	mkdir -p $(PEAR_CONFIG_DIR)
+	$(PEAR) discover-channel pear.phpunit.de
 	$(PEAR) -v -v -v \
 	        package package.xml
 	tar xvf $(pear_pkg).tgz
