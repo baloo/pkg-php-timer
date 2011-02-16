@@ -7,16 +7,19 @@ PEAR_CONFIG_DIR=$(shell pwd)/debian/tmp
 PEAR ?= /usr/bin/pear
 PEAR += -D php_dir=$(PEAR_CONFIG_DIR)
 
+PEAR_PACKAGE_NAME=PHP_Timer
+
+pear_pkg=$(PEAR_PACKAGE_NAME)-$(DEB_UPSTREAM_VERSION)
+
+
 update-config::
 	mkdir -p $(PEAR_CONFIG_DIR)
 	$(PEAR) channel-discover pear.phpunit.de
 	$(PEAR) -v -v -v \
 	        package package.xml
-	pear_pkg = $(shell LANG=C $(PEAR)  -v -v -v info package.xml | grep '^Name' | sed 's/Name *//')-$(DEB_UPSTREAM_VERSION)
 	tar xvf $(pear_pkg).tgz
 
 reverse-config::
-	pear_pkg = $(shell LANG=C $(PEAR)  -v -v -v info package.xml | grep '^Name' | sed 's/Name *//')-$(DEB_UPSTREAM_VERSION)
 	rm -rf $(PEAR_CONFIG_DIR)
 	if [ -f $(pear_pkg).tgz ]; then \
 	        rm $(pear_pkg).tgz; \
